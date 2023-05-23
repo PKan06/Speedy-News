@@ -25,34 +25,48 @@ export class News extends Component {
           page:1
         }
       }
-      
-    async componentDidMount(){
-      let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=1&pageSize=${this.props.PageSize}`;
+    
+    async updateNews()
+    {
+      let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=${this.state.page}&pageSize=${this.props.PageSize}`;
       this.setState({loading : true})
       let data = await fetch(url);
       let parsedData = await data.json();
-      this.setState({articles: parsedData.articles, totalArticles: parsedData.totalResults,loading : false})
+      this.setState({articles: parsedData.articles, totalArticles: parsedData.totalResults, loading : false})
+    }
+    
+    async componentDidMount(){
+      // let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=1&pageSize=${this.props.PageSize}`;
+      // this.setState({loading : true})
+      // let data = await fetch(url);
+      // let parsedData = await data.json();
+      // this.setState({articles: parsedData.articles, totalArticles: parsedData.totalResults,loading : false})
+      this.updateNews();
     }
     
     handleprevclick = async()=>{
-      console.log("prev")
-      let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=${this.state.page - 1}&pageSize=${this.props.PageSize}`;
-      this.setState({loading : true})
-      let data = await fetch(url);
-      let parsedData = await data.json();
-      this.setState({articles: parsedData.articles,page: this.state.page - 1, loading : false})
+      // console.log("prev")
+      // let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=${this.state.page - 1}&pageSize=${this.props.PageSize}`;
+      // this.setState({loading : true})
+      // let data = await fetch(url);
+      // let parsedData = await data.json();
+      // this.setState({articles: parsedData.articles,page: this.state.page - 1, loading : false})
+      this.setState({page: this.state.page - 1})
+      this.updateNews();
     }
-
+    
     handlenextclick = async()=>{
       console.log("next")
-      if(!(this.state.page+1 > Math.ceil(this.state.totalArticles/this.props.PageSize)))
-      {
-        let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=${this.state.page + 1}&pageSize=${this.props.PageSize}`;
-        this.setState({loading : true})
-        let data = await fetch(url);
-        let parsedData = await data.json();
-        this.setState({articles: parsedData.articles,page: this.state.page + 1,loading : false})
-      }
+      // if(!(this.state.page+1 > Math.ceil(this.state.totalArticles/this.props.PageSize)))
+      // {
+        // let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=${this.state.page + 1}&pageSize=${this.props.PageSize}`;
+        // this.setState({loading : true})
+        // let data = await fetch(url);
+        // let parsedData = await data.json();
+        // this.setState({articles: parsedData.articles,page: this.state.page + 1,loading : false})
+        // }
+        this.setState({page: this.state.page + 1})
+        this.updateNews();
     }
     render() {
       console.log("render");
@@ -63,7 +77,7 @@ export class News extends Component {
           <div className="row">
             {!this.state.loading && this.state.articles.map((element)=>{
               return <div className="col-md-4" key = {element.url}>  
-                  <NewsItem title = {element.title?element.title.slice(0,40):""} description = {element.description?element.description.slice(0,80):""} imageUrl = {element.urlToImage?element.urlToImage:"https://images.hindustantimes.com/tech/img/2023/05/20/1600x900/exoplanet_1684604246137_1684604260516.png"} newsUrl={element.url}/>
+                  <NewsItem title = {element.title?element.title.slice(0,40):""} description = {element.description?element.description.slice(0,80):""} imageUrl = {element.urlToImage?element.urlToImage:"https://images.hindustantimes.com/tech/img/2023/05/20/1600x900/exoplanet_1684604246137_1684604260516.png"} newsUrl={element.url}  author= {element.author?element.author:"unknown"} date= {element.publishedAt} Source={element.author}/>
               </div>
             })}
           </div>
