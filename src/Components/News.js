@@ -47,7 +47,7 @@ export class News extends Component {
         totalArticles: parsedData.totalResults
       })
       this.props.setprogress(100);
-      console.log("-> Page : ", this.state.page,"\n");
+      // console.log("-> Page : ", this.state.page,"\n");
     }
     
     async componentDidMount(){
@@ -62,8 +62,8 @@ export class News extends Component {
       this.setState({articles: this.state.articles.concat(parsedData.articles),
         totalArticles: parsedData.totalResults
       })
-      console.log(this.state.articles.length, this.state.totalArticles,",value :",this.state.articles.length !== this.totalArticles,"\n");
-      console.log("-> Page : ", this.state.page,"\n");
+      // console.log(this.state.articles.length, this.state.totalArticles,",value :",this.state.articles.length !== this.totalArticles,"\n");
+      // console.log("-> Page : ", this.state.page,"\n");
     };
     
     render() {
