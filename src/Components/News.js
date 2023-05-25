@@ -29,19 +29,25 @@ export class News extends Component {
           articles : [],
           loading: true,
           page:1,
-          totalResults : 0
+          totalArticles : 0
         }
         document.title = `${this.capitalizeFirstLetter(this.props.category)} - Speedy News`
       }
     
     async updateNews()
     {
-      let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=${this.state.page}&pageSize=${this.props.PageSize}`;
+      this.setState({page : this.state.page + 1}) // must add to increase the page number
+      this.props.setprogress(0);
+      let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page}&pageSize=${this.props.PageSize}`;
+      this.props.setprogress(30);
       let data = await fetch(url);
       let parsedData = await data.json();
+      this.props.setprogress(50);
       this.setState({articles: parsedData.articles,
-         totalArticles: parsedData.totalResults
-        })
+        totalArticles: parsedData.totalResults
+      })
+      this.props.setprogress(100);
+      console.log("-> Page : ", this.state.page,"\n");
     }
     
     async componentDidMount(){
@@ -50,15 +56,16 @@ export class News extends Component {
     
     fetchMoreData = async() => {
       this.setState({page : this.state.page + 1})
-      let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=283a33a4d8b5455a805e3e4c818d73b6&page=${this.state.page}&pageSize=${this.props.PageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?&country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page}&pageSize=${this.props.PageSize}`;
       let data = await fetch(url);
       let parsedData = await data.json();
       this.setState({articles: this.state.articles.concat(parsedData.articles),
-         totalArticles: parsedData.totalResults,
-         loading : false
-        })
+        totalArticles: parsedData.totalResults
+      })
+      console.log(this.state.articles.length, this.state.totalArticles,",value :",this.state.articles.length !== this.totalArticles,"\n");
+      console.log("-> Page : ", this.state.page,"\n");
     };
-
+    
     render() {
       console.log("render");
       return (
@@ -68,7 +75,7 @@ export class News extends Component {
           <InfiniteScroll
           dataLength={this.state.articles.length}
           next={this.fetchMoreData}
-          hasMore={this.state.articles.length !== this.totalResults} // last scroll to 
+          hasMore={this.state.articles.length !== this.state.totalArticles} // last scroll to 
           loader={<Spinner/>}
           >
             <div className= "container">
