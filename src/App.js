@@ -3,7 +3,7 @@ import './App.css';
 import React, { Component } from 'react'
 import Navbar from './Components/Navbar';
 import News from './Components/News';
-import LoadingBar from 'react-top-loading-bar'
+import LoadingBar from 'react-top-loading-bar';
 
 import {
   BrowserRouter,
