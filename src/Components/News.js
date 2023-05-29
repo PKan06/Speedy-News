@@ -7,17 +7,16 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const News = (props)=> {
     const [articles, setarticales] = useState([])
     const [loading, setloading] = useState(true)
-    const [page, setpage] = useState(1)
+    const [page, setpage] = useState(1) // it is an asyncronous function 
     const [totalArticles, settotalArticles] = useState(0)
-    // document.title = `${this.capitalizeFirstLetter(props.category)} - Speedy News`
-
+    
     const capitalizeFirstLetter = (string)=> {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     
     const updateNews= async()=>{
-      setpage(page+1)
+      // setpage(page+1)
       // this.setState({page : this.state.page + 1}) // must add to increase the page number
       props.setprogress(0);
       let url = `https://newsapi.org/v2/top-headlines?&country=${props.country}&category=${props.category}&apiKey=${props.apikey}&page=${page}&pageSize=${props.PageSize}`;
@@ -29,16 +28,18 @@ const News = (props)=> {
       settotalArticles(parsedData.totalResults);
       setloading(false);
       props.setprogress(100);
-      // console.log("-> Componentdimount Page : ", page,"\n");
+      // console.log("-> Componentdimount Page : ", page,"\n")
+      ;
     }
     
     useEffect(()=>{
+      document.title = `${capitalizeFirstLetter(props.category)} - Speedy News`
       updateNews();
     },[])
 
     const fetchMoreData = async() => {
+      let url = `https://newsapi.org/v2/top-headlines?&country=${props.country}&category=${props.category}&apiKey=${props.apikey}&page=${page+1}&pageSize=${props.PageSize}`;
       setpage(page+1);
-      let url = `https://newsapi.org/v2/top-headlines?&country=${props.country}&category=${props.category}&apiKey=${props.apikey}&page=${page}&pageSize=${props.PageSize}`;
       let data = await fetch(url);
       let parsedData = await data.json();
       setarticales(articles.concat(parsedData.articles));
@@ -50,7 +51,7 @@ const News = (props)=> {
       // console.log("render");
       return (
         <>
-          <h1 className='text-center' style = {{margin : '35px 0px'}}>Speedy News - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
+          <h1 className='text-center' style = {{margin : '35px 0px', marginTop : '100px'}}>Speedy News - Top {capitalizeFirstLetter(props.category)} Headlines</h1>
           {loading && <Spinner/>} 
           <InfiniteScroll
           dataLength={articles.length}

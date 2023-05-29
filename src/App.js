@@ -3,21 +3,12 @@ import React, { useState } from 'react'
 import Navbar from './Components/Navbar';
 import News from './Components/News';
 import LoadingBar from 'react-top-loading-bar';
-
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
+import {BrowserRouter,Routes,Route} from "react-router-dom";
 
 const App = () => {
   const PageSize = 6;
   const apikey = process.env.REACT_APP_NEWS_API;
-  const [progress, setPro] = useState(0)
-
-  const setProgress = (progress)=> {
-    setPro(progress)
-  }
+  const [progress, setProgress] = useState(0)
 
     return (
       <>
